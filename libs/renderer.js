@@ -93,13 +93,14 @@ class Renderer {
         var toReturn = false;
         var tmpData = [];
         // probably a better way to do this, fuck that
-        this.data.forEach((yLine, yIndex) => {
+        /* this.data.forEach((yLine, yIndex) => {
             tmpData.push([]);
             yLine.forEach((xData, xIndex) => {
                 tmpData[yIndex].push(xData);
                 tmpData[yIndex].push(xData);
             });
-        });
+        }); */
+        // nevermind we don't need this line anymore
         this.data.forEach((yLine, y2) => {
             yLine.forEach((xData, x2) => {
                 if (x2 == x && y2 == y) {
