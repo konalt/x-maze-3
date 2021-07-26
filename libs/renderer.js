@@ -21,6 +21,7 @@ class Renderer {
         this.width = 0;
         this.height = 0;
         this.frametime = 16;
+        this.widthEnforcement = true;
     };
 
     setText(text) {
@@ -32,6 +33,11 @@ class Renderer {
     addEntity(entity) {
         this.entities[entity.name] = entity;
         entity.currentRenderer = this;
+    }
+    hasEntity(entity) {
+        // force this to be a bool
+        // this looks terrible but it works i guess
+        return this.entities[entity.name] ? true : false;
     }
 
     setPrefixText(text) {
@@ -156,10 +162,12 @@ class Renderer {
                 }
                 this.currentRendering.split("\n").forEach((y, index) => {
                     // I made this function while on about 200mg of caffeine
-                    if (y.length > this.width) {
-                        y = y.substr(0, this.width);
-                    } else if (y.length < this.width) {
-                        y.padEnd(y.length < this.width);
+                    if (this.widthEnforcement) {
+                        if (y.length > this.width) {
+                            y = y.substr(0, this.width);
+                        } else if (y.length < this.width) {
+                            y.padEnd(y.length < this.width);
+                        }
                     }
                     Object.values(this.entities).forEach(entity => {
                         if (entity.y == index) {
