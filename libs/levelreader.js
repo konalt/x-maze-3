@@ -9,6 +9,8 @@ function getLevelData(levelname = "unknown", overrideFolder = "levels") {
     try {
         if (fs.existsSync(path.join("./", overrideFolder, levelname))) {
             // level exists, get data and return
+            // this comment is misleading, it does not return level.data, it returns level
+            // i can't reword stuff well
             return JSON.parse(fs.readFileSync(path.join("./", overrideFolder, levelname)).toString());
         } else {
             return null;
