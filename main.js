@@ -28,7 +28,7 @@ var currentMenu = 0;
 // Command stuff
 var cmdActive = false;
 var currentCommand = "";
-var cmdHistory = ["", "", ""];
+var cmdHistory = new Array(5);
 
 // Create entity
 var player = new Entity("Player");
@@ -86,16 +86,26 @@ var menuKeyActions = {
                                 if (!cmdActive) return;
                                 switch (data.name) {
                                     case "return":
-                                        var result = run(currentCommand.split(" "), currentCommand.split(" ").splice(0, 1));
+                                        var result = run(currentCommand.split(" ")[0], currentCommand.split(" ").slice(1));
                                         // why this terribleness? i could fix it
                                         // but i don't want to so fuck it
                                         if (result == "CLOSE_CONSOLE") cmdActive = false;
+                                        cmdHistory.push(">" + currentCommand);
                                         cmdHistory.push(result);
-                                        cmdHistory[0] = undefined;
+                                        cmdHistory.shift();
+                                        cmdHistory.shift();
+                                        console.log(cmdHistory.length);
                                         currentCommand = "";
                                         return;
                                     case "backspace":
                                         currentCommand = currentCommand.substr(0, currentCommand.length - 1);
+                                        return;
+                                    case "space":
+                                        currentCommand += " ";
+                                    case "up":
+                                    case "down":
+                                    case "left":
+                                    case "right":
                                         return;
                                     default:
                                         currentCommand += data.name;
@@ -148,7 +158,7 @@ function setLevel(level) {
         renderer.setPrefixText(level.name);
         renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}`);
         renderer.setPostRender(function() {
-            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}${cmdActive ? cmdHistory.join("\n") + "---\n>" + currentCommand : ""}`);
+            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}${cmdActive ? "\nKonaltEngine Console\n---\n" + cmdHistory.join("\n") + "\n---\n>" + currentCommand : ""}`);
         });
         renderer.setEnabled(true);
     } else {

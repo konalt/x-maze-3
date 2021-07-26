@@ -6,7 +6,7 @@ class Command {
         if (typeof args == "string") {
             args = args.split(" ");
         }
-        this.cb(args);
+        return this.cb(args);
     }
 }
 
@@ -16,6 +16,9 @@ const commandList = {
     }),
     close: new Command(args => {
         return "CLOSE_CONSOLE";
+    }),
+    help: new Command(args => {
+        return "KE Console help\nrenderer - Renderer subcommands\nent - Entity subcommands";
     })
 };
 
