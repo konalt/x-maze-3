@@ -13,6 +13,9 @@ class Command {
 const commandList = {
     test: new Command(args => {
         return "This is a test command. Arguments:" + args.join(",");
+    }),
+    close: new Command(args => {
+        return "CLOSE_CONSOLE";
     })
 };
 

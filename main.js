@@ -8,6 +8,7 @@ const { KeyAction } = require("./libs/keyboard");
 const { Entity } = require("./libs/entity");
 const Direction = require("./libs/direction");
 const menus = require("./libs/menus");
+const { run } = require("./libs/commands");
 
 // Create renderer
 var renderer = new Renderer();
@@ -27,6 +28,7 @@ var currentMenu = 0;
 // Command stuff
 var cmdActive = false;
 var currentCommand = "";
+var cmdHistory = ["", "", ""];
 
 // Create entity
 var player = new Entity("Player");
@@ -84,7 +86,12 @@ var menuKeyActions = {
                                 if (!cmdActive) return;
                                 switch (data.name) {
                                     case "return":
-                                        cmdActive = false;
+                                        var result = run(currentCommand.split(" "), currentCommand.split(" ").splice(0, 1));
+                                        // why this terribleness? i could fix it
+                                        // but i don't want to so fuck it
+                                        if (result == "CLOSE_CONSOLE") cmdActive = false;
+                                        cmdHistory.push(result);
+                                        cmdHistory[0] = undefined;
                                         currentCommand = "";
                                         return;
                                     case "backspace":
@@ -141,7 +148,7 @@ function setLevel(level) {
         renderer.setPrefixText(level.name);
         renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}`);
         renderer.setPostRender(function() {
-            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}${cmdActive ? "\n>" + currentCommand : ""}`);
+            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}${cmdActive ? cmdHistory.join("\n") + "---\n>" + currentCommand : ""}`);
         });
         renderer.setEnabled(true);
     } else {
