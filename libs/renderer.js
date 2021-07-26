@@ -1,5 +1,3 @@
-const { BlockType, toBlockType } = require("./blocktype");
-
 class RenderOptions {
     constructor(border = "█", padding = 1, defaultColor = "#c0c0c0") {
         this.border = border;
@@ -102,7 +100,7 @@ class Renderer {
                 tmpData[yIndex].push(xData);
             });
         });
-        tmpData.forEach((yLine, y2) => {
+        this.data.forEach((yLine, y2) => {
             yLine.forEach((xData, x2) => {
                 if (x2 == x && y2 == y) {
                     toReturn = xData;
@@ -120,13 +118,13 @@ class Renderer {
             yLine.forEach((xData, x) => {
                 switch (xData) {
                     case 0:
-                        tempText += "  ";
+                        tempText += " ";
                         break;
                     case 1:
-                        tempText += "██"
+                        tempText += "█"
                         break;
                     default:
-                        tempText += "??";
+                        tempText += "?";
                         break;
                 }
             });

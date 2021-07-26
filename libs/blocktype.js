@@ -1,7 +1,15 @@
-const BlockType = {
-    AIR: 0,
-    BLOCK: 1,
-    TEXT: 2
+class BlockType {
+    constructor(hasCollision = true, sprite = "?") {
+        this.col = hasCollision;
+        this.sprite = sprite;
+    }
+}
+
+const BlockTypes = {
+    AIR: new BlockType(false, " "),
+    BLOCK: new BlockType(true, "█"),
+    KEYDOOR: new BlockType(false, "▒"),
+    KEY: new BlockType(false, "○")
 };
 
-module.exports.BlockType = BlockType;
+module.exports.BlockTypes = BlockTypes;

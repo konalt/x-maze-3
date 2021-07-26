@@ -1,4 +1,4 @@
-const { BlockType } = require("./blocktype");
+const { BlockTypes } = require("./blocktype");
 const Direction = require("./direction");
 
 class Entity {
@@ -40,7 +40,7 @@ class Entity {
         if ((this.enableCollision && this.currentRenderer) && (yb < 0 || xb < 0 || yb >= this.currentRenderer.height || xb >= this.currentRenderer.width)) {
             // Entity collided with border
             return;
-        } else if ((this.enableCollision && this.currentRenderer) && this.currentRenderer.getDataAt(xb, yb) == BlockType.BLOCK) {
+        } else if ((this.enableCollision && this.currentRenderer) && Object.values(BlockTypes)[this.currentRenderer.getDataAt(xb, yb)].col) {
             // Entity collided with block
             return;
         }

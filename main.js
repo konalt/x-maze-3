@@ -7,7 +7,7 @@ const levelreader = require("./libs/levelreader");
 const { KeyAction } = require("./libs/keyboard");
 const { Entity } = require("./libs/entity");
 const Direction = require("./libs/direction");
-const mainmenu = require("./libs/menuscreen");
+const menus = require("./libs/menus");
 
 // Create renderer
 var renderer = new Renderer();
@@ -17,11 +17,17 @@ renderer.setEnabled(true);
 renderer.widthEnforcement = false;
 
 // Create main menu
-var mainMenuSelectedOption = 0;
-renderer.setText(mainmenu.generateMainMenu(mainMenuSelectedOption));
+var selectedOption = 0;
+renderer.setText(menus.generateMenu(currentMenu, selectedOption));
 renderer.setPostRender(function() {
-    renderer.setText(mainmenu.generateMainMenu(mainMenuSelectedOption));
+    renderer.setText(menus.generateMenu(currentMenu, selectedOption));
 });
+var currentMenu = 0;
+
+// Command stuff
+var cmdActive = false;
+var currentCommand = "";
+
 // Create entity
 var player = new Entity("Player");
 player.setSprite("☻");
@@ -30,38 +36,93 @@ var movementKeyActions = {};
 
 var menuKeyActions = {
     scrollUp: new KeyAction(function(data) {
-        mainMenuSelectedOption--;
-        if (mainMenuSelectedOption < 0) {
-            mainMenuSelectedOption = mainmenu.options.length < 1;
+        selectedOption--;
+        if (selectedOption < 0) {
+            selectedOption = menus.mainMenuOptions.length < 1;
         }
     }, "w"),
     scrollDown: new KeyAction(function(data) {
-        mainMenuSelectedOption++;
-        if (mainMenuSelectedOption >= mainmenu.options.length) {
-            mainMenuSelectedOption = 0;
+        selectedOption++;
+        if (selectedOption >= menus.mainMenuOptions.length) {
+            selectedOption = 0;
         }
     }, "s"),
     chooseOption: new KeyAction(function(data) {
-        if (mainMenuSelectedOption == 0) {
-            setLevel("testlevel");
-            Object.values(menuKeyActions).forEach(action => {
-                action.delete();
-            });
-            menuKeyActions = {
-                upAction: new KeyAction(function(data) {
-                    player.move(Direction.UP);
-                }, "w"),
-                downAction: new KeyAction(function(data) {
-                    player.move(Direction.DOWN);
-                }, "s"),
-                leftAction: new KeyAction(function(data) {
-                    player.move(Direction.LEFT);
-                }, "a"),
-                rightAction: new KeyAction(function(data) {
-                    player.move(Direction.RIGHT);
-                }, "d")
-            }
+        switch (currentMenu) {
+            case 0:
+                // Main Menu
+                switch (selectedOption) {
+                    case 0:
+                        // Play
+                        setLevel("testlevel");
+                        Object.values(menuKeyActions).forEach(action => {
+                            action.delete();
+                            action = undefined;
+                        });
+                        movementKeyActions = {
+                            upAction: new KeyAction(function(data) {
+                                if (cmdActive) return;
+                                player.move(Direction.UP);
+                            }, "w"),
+                            downAction: new KeyAction(function(data) {
+                                if (cmdActive) return;
+                                player.move(Direction.DOWN);
+                            }, "s"),
+                            leftAction: new KeyAction(function(data) {
+                                if (cmdActive) return;
+                                player.move(Direction.LEFT);
+                            }, "a"),
+                            rightAction: new KeyAction(function(data) {
+                                if (cmdActive) return;
+                                player.move(Direction.RIGHT);
+                            }, "d"),
+                            enableCommandAction: new KeyAction(function(data) {
+                                if (!data.shift || cmdActive) return;
+                                cmdActive = true;
+                            }, "c"),
+                            commandTypeAction: new KeyAction(function(data) {
+                                if (!cmdActive) return;
+                                switch (data.name) {
+                                    case "return":
+                                        cmdActive = false;
+                                        currentCommand = "";
+                                        return;
+                                    case "backspace":
+                                        currentCommand = currentCommand.substr(0, currentCommand.length - 1);
+                                        return;
+                                    default:
+                                        currentCommand += data.name;
+                                        return;
+                                }
+                            }, "*")
+                        }
+                        break;
+                    case 1:
+                        currentMenu = 1;
+                        selectedOption = 0;
+                        break;
+                    case 2:
+                        console.clear();
+                        process.exit(0);
+                    default:
+                        break;
+                }
+                break;
+            case 1:
+                switch (selectedOption) {
+                    case 2:
+                        currentMenu = 0;
+                        selectedOption = 0;
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
         }
+
     }, "return")
 }
 
@@ -80,7 +141,7 @@ function setLevel(level) {
         renderer.setPrefixText(level.name);
         renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}`);
         renderer.setPostRender(function() {
-            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}`);
+            renderer.setSuffixText(`X: ${player.x}, Y: ${player.y}${player.isOutOfBounds ? "\nPlayer is out of bounds!" : ""}${cmdActive ? "\n>" + currentCommand : ""}`);
         });
         renderer.setEnabled(true);
     } else {
