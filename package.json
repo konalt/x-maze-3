@@ -1,0 +1,23 @@
+{
+    "name": "x-maze-iii",
+    "version": "1.0.0",
+    "description": "swagshit moneymoney",
+    "main": "main.js",
+    "bin": "./main.js",
+    "scripts": {
+        "test": "xm3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/konalt/x-maze-iii.git"
+    },
+    "keywords": [
+        "maze"
+    ],
+    "author": "konalt",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/konalt/x-maze-iii/issues"
+    },
+    "homepage": "https://github.com/konalt/x-maze-iii#readme"
+}
