@@ -83,7 +83,7 @@ var menuKeyActions = {
                                 cmdActive = true;
                             }, "c"),
                             commandTypeAction: new KeyAction(function(data) {
-                                if (!cmdActive) return;
+                                if (!cmdActive || (data.shift && data.name == "c")) return;
                                 switch (data.name) {
                                     case "return":
                                         var result = run(currentCommand.split(" ")[0], currentCommand.split(" ").slice(1));
