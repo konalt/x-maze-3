@@ -1,4 +1,4 @@
-var mainMenuOptions = ["Play", "Settings", "Exit Game"];
+var mainMenuOptions = ["Play", "Settings", "Level Editor", "Exit Game"];
 var settingsMenuOptions = ["Some Setting", "Epic Setting", "Back"];
 
 function generateMainMenu(selected) {

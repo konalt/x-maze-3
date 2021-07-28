@@ -37,7 +37,6 @@ class Renderer {
         // this looks terrible but it works i guess
         return this.entities[entity.name] ? true : false;
     }
-
     setPrefixText(text) {
         this.currentPrefixText = text;
     }
@@ -91,16 +90,6 @@ class Renderer {
     }
     getDataAt(x, y) {
         var toReturn = false;
-        var tmpData = [];
-        // probably a better way to do this, fuck that
-        /* this.data.forEach((yLine, yIndex) => {
-            tmpData.push([]);
-            yLine.forEach((xData, xIndex) => {
-                tmpData[yIndex].push(xData);
-                tmpData[yIndex].push(xData);
-            });
-        }); */
-        // nevermind we don't need this line anymore
         this.data.forEach((yLine, y2) => {
             yLine.forEach((xData, x2) => {
                 if (x2 == x && y2 == y) {
@@ -110,8 +99,15 @@ class Renderer {
         });
         return toReturn;
     }
+    setDataAt(x, y, dataToSet, updateText) {
+        this.data[y][x] = dataToSet;
+        this.setText(this.getTextFromData());
+    }
     setData(data) {
         this.data = data;
+    }
+    getData() {
+        return this.data;
     }
     getTextFromData() {
         var tempText = "";
@@ -176,7 +172,11 @@ class Renderer {
                             } else {
                                 entity.isOutOfBounds = false;
                             }
-                            y = y.substr(0, entity.x) + entity.sprite + y.substr(entity.x + entity.sprite.length);
+                            if (this.getDataAt(entity.x, entity.y) == 1) {
+                                y = y.substr(0, entity.x) + "\x1b[47;30m" + entity.sprite + "\x1b[0m" + y.substr(entity.x + entity.sprite.length);
+                            } else {
+                                y = y.substr(0, entity.x) + entity.sprite + y.substr(entity.x + entity.sprite.length);
+                            }
                         }
                     });
                     this._tmp_rendering += (this.currentOptions.border ? this.currentOptions.border.repeat(2) : "") + " ".repeat(this.currentOptions.padding * 2) + y + " ".repeat(this.currentOptions.padding * 2) + (this.currentOptions.border ? this.currentOptions.border.repeat(2) : "") + "\n";

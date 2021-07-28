@@ -1,9 +1,9 @@
 const { BlockTypes } = require("./blocktype");
-const Direction = require("./direction");
+const { Direction } = require("./direction");
 
 class Entity {
     constructor(name = "Unknown Entity " + Math.ceil(Math.random() * 100)) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.x = 0;
         this.y = 0;
         this.sprite = "?";
@@ -43,9 +43,10 @@ class Entity {
         } else if ((this.enableCollision && this.currentRenderer) && Object.values(BlockTypes)[this.currentRenderer.getDataAt(xb, yb)].col) {
             // Entity collided with block
             return;
+        } else {
+            this.x = xb;
+            this.y = yb;
         }
-        this.x = xb;
-        this.y = yb;
     }
     setSprite(spr) {
         this.sprite = spr;

@@ -15,6 +15,7 @@ class KeyAction {
 
 process.stdin.setEncoding('utf-8');
 process.stdin.on('keypress', (_, data) => {
+    if (!data.name) return;
     if (data && data.ctrl && data.name == 'c') process.exit();
     if (keyActions[data.name.toLowerCase()]) {
         keyActions[data.name.toLowerCase()].callback(data);

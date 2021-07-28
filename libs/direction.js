@@ -6,4 +6,4 @@ const direction = {
     RIGHT: "right",
 };
 
-module.exports = direction;
+module.exports.Direction = direction;
