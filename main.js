@@ -83,7 +83,7 @@ var menuKeyActions = {
                                 if (!cmdActive || (data.shift && data.name == "c")) return;
                                 switch (data.name) {
                                     case "return":
-                                        var result = run(currentCommand.split(" ")[0], currentCommand.split(" ").slice(1));
+                                        var result = run(currentCommand.split(" ")[0], currentCommand.split(" ").slice(1), renderer);
                                         // why this terribleness? i could fix it
                                         // but i don't want to so fuck it
                                         if (result == "CLOSE_CONSOLE") cmdActive = false;

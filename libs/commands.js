@@ -27,25 +27,39 @@ const commandList = {
         if (args.length == 0) {
             return "Usage: ent [subcommand]"
         }
-        if (args[0] == "clone") {
-            if (renderer.entities[args[1].toLowerCase()]) {
-                var cache = [];
-                renderer.entities[args[1].toLowerCase() + "_clone"] = JSON.parse(JSON.stringify({ ent: renderer.entities[args[1].toLowerCase()] }, (key, value) => {
-                    if (typeof value === 'object' && value !== null) {
-                        // Duplicate reference found, discard key
-                        if (cache.includes(value)) return;
+        switch (args[0]) {
+            case "clone":
+                if (renderer.entities[args[1].toLowerCase()]) {
+                    var cache = [];
+                    renderer.entities[args[1].toLowerCase() + "_clone"] = JSON.parse(JSON.stringify({ ent: renderer.entities[args[1].toLowerCase()] }, (key, value) => {
+                        if (typeof value === 'object' && value !== null) {
+                            // Duplicate reference found, discard key
+                            if (cache.includes(value)) return;
 
-                        // Store value in our collection
-                        cache.push(value);
-                    }
-                    return value;
-                })).ent;
-                cache = null;
-                renderer.entities[args[1].toLowerCase() + "_clone"].name = args[1].toLowerCase() + "_clone";
-                return "Cloned entity.";
-            } else {
-                return "Entity " + args[1].toLowerCase() + "does not exist";
-            }
+                            // Store value in our collection
+                            cache.push(value);
+                        }
+                        return value;
+                    })).ent;
+                    cache = null;
+                    renderer.entities[args[1].toLowerCase() + "_clone"].name = args[1].toLowerCase() + "_clone";
+                    return "Cloned entity.";
+                } else {
+                    return "Entity " + args[1].toLowerCase() + "does not exist";
+                }
+            case "sprite":
+                if (!args[2]) {
+                    return "Usage: ent sprite [entityname] [sprite]";
+                }
+                console.log(renderer);
+                if (renderer.entities[args[1].toLowerCase()]) {
+                    renderer.entities[args[1].toLowerCase()].setSprite(args[2].substr(0, 1));
+                    return "Sprite set.";
+                } else {
+                    return "Entity " + args[1].toLowerCase() + "does not exist";
+                }
+            default:
+                return "Unknown subcommand: " + args[0]
         }
     }),
     level: new Command((args, renderer) => {
