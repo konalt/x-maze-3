@@ -61,27 +61,22 @@ var menuKeyActions = {
                         movementKeyActions = {
                             upAction: new KeyAction(function(data) {
                                 if (cmdActive) return;
-                                console.log(player.x + " " + player.y);
                                 player.move(Direction.UP);
                             }, "w"),
                             downAction: new KeyAction(function(data) {
                                 if (cmdActive) return;
-                                console.log(player.x + " " + player.y);
                                 player.move(Direction.DOWN);
                             }, "s"),
                             leftAction: new KeyAction(function(data) {
                                 if (cmdActive) return;
-                                console.log(player.x + " " + player.y);
                                 player.move(Direction.LEFT);
                             }, "a"),
                             rightAction: new KeyAction(function(data) {
                                 if (cmdActive) return;
-                                console.log(player.x + " " + player.y);
                                 player.move(Direction.RIGHT);
                             }, "d"),
                             enableCommandAction: new KeyAction(function(data) {
                                 if (!data.shift || cmdActive) return;
-                                console.log(player.x + " " + player.y);
                                 cmdActive = true;
                             }, "c"),
                             commandTypeAction: new KeyAction(function(data) {
