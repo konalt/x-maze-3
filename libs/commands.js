@@ -1,3 +1,4 @@
+const { Entity } = require("./entity");
 const levelparser = require("./levelparser");
 const { Renderer } = require("./renderer");
 
@@ -51,10 +52,27 @@ const commandList = {
                 if (!args[2]) {
                     return "Usage: ent sprite [entityname] [sprite]";
                 }
-                console.log(renderer);
                 if (renderer.entities[args[1].toLowerCase()]) {
                     renderer.entities[args[1].toLowerCase()].setSprite(args[2].substr(0, 1));
                     return "Sprite set.";
+                } else {
+                    return "Entity " + args[1].toLowerCase() + "does not exist";
+                }
+            case "add":
+                if (!args[1]) {
+                    return "Usage: ent add [name]"
+                }
+                var newEnt = new Entity(args[1]);
+                renderer.addEntity(newEnt);
+                return "Entity " + args[1] + " added.";
+            case "tp":
+            case "setpos":
+                if (!args[3]) {
+                    return "Usage: ent " + args[0] + " [entityname] [x] [y]";
+                }
+                if (renderer.entities[args[1].toLowerCase()]) {
+                    renderer.entities[args[1].toLowerCase()].setPosition(args[2], args[3]);
+                    return "Teleported entity " + args[1] + " to " + args[2] + "," + args[3];
                 } else {
                     return "Entity " + args[1].toLowerCase() + "does not exist";
                 }
