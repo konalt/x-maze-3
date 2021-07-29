@@ -88,6 +88,7 @@ const commandList = {
                         var en = "key.preset." + genRanHex(16);
                         var newEnt = new Entity(en);
                         newEnt.setSprite("○");
+                        newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
                         renderer.addEntity(newEnt);
                         return "Key added. Name: " + en;
                     case "keydoor":
