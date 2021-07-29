@@ -77,6 +77,7 @@ class Entity {
     setOnCollideWith(ent, callback) {
         // On entity collisions. Currently have no clue how to handle this, maybe with the renderer?
         // Maybe it checks every frame? Who knows. Not me, anyway.
+        // To past me, it's with the renderer
         if (this.currentRenderer.entities[ent.name]) {
             this.collideFunctions[ent.name] = callback;
             return true;

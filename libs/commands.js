@@ -89,12 +89,14 @@ const commandList = {
                         var en = "key.preset." + genRanHex(16);
                         var newEnt = new Entity(en);
                         newEnt.setSprite("○");
-                        newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
-                        // Add player collision function
-                        newEnt.setOnCollideWith(renderer.entities.player, () => {
-                            pickupKey();
-                        });
+                        // Set position. If position is not given, just spawn it at 0,0
+                        newEnt.setPosition(args[2] ? args[2] : 0, args[3] ? args[3] : 0);
                         renderer.addEntity(newEnt);
+                        // Add player collision function
+                        // Do this after because currentRenderer is undefined until addEntity
+                        newEnt.setOnCollideWith(renderer.entities.player, () => {
+                            pickupKey(newEnt);
+                        });
                         return "Key added. Name: " + en;
                     case "keydoor":
                         var en = "keydoor.preset." + genRanHex(16);

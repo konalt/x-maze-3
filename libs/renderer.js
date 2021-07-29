@@ -1,3 +1,6 @@
+const { Entity } = require("./entity");
+const { params } = require("./vars");
+
 class RenderOptions {
     constructor(border = "█", padding = 1, defaultColor = "#c0c0c0") {
         this.border = border;
@@ -61,6 +64,21 @@ class Renderer {
 
     setOptions(options = new RenderOptions()) {
         this.currentOptions = options;
+    }
+
+    // mr. renderer has to do this bc he's the one with all the fucking ent references
+    // greedy little bitch
+    doEntityCollision() {
+        Object.values(this.entities).forEach((ent = new Entity()) => {
+            // pls give object.length js
+            if (ent.enableCollision && Object.keys(ent.collideFunctions).length > 0) {
+                var samePosEnt = Object.values(this.entities).find(e => ent.x == e.x && ent.y == e.y);
+                if (samePosEnt && ent.collideFunctions[samePosEnt.name] && samePosEnt.enableCollision) {
+                    if (params.debug) console.log("DEBUG: Entity " + ent.name + " collided with entity " + samePosEnt.name + ".");
+                    ent.collideFunctions[samePosEnt.name]();
+                }
+            }
+        });
     }
 
     setEnabled(activate) {
@@ -144,6 +162,7 @@ class Renderer {
                 // Rendering code
                 // Can someone please make a pull request to fix this
                 // It's a fucking mess
+                this.doEntityCollision();
                 this.preRenderCallback();
                 this._tmp_rendering = "";
                 this._tmp_rendering += this.currentPrefixText ? this.currentPrefixText + "\n" : "";
@@ -193,7 +212,6 @@ class Renderer {
                 // Draw render
                 console.clear();
                 console.log(this._tmp_rendering);
-
             }
         }
     }
