@@ -75,15 +75,23 @@ class Entity {
         this.visible = visible;
     }
     setOnCollideWith(ent, callback) {
-        // On entity collisions. Currently have no clue how to handle this, maybe with the renderer?
-        // Maybe it checks every frame? Who knows. Not me, anyway.
-        // To past me, it's with the renderer
+        // On entity collisions.
         if (this.currentRenderer.entities[ent.name]) {
             this.collideFunctions[ent.name] = callback;
             return true;
         } else {
             return false;
         }
+    }
+    delete() {
+        if (this.name == "player") {
+            // No idiot proofing here, you brought this on yourself
+            console.error("FATAL: PLAYER ENTITY DELETED!");
+            process.exit(1);
+        }
+        // is there a better way of doing this?
+        // who knows
+        this = undefined;
     }
 }
 

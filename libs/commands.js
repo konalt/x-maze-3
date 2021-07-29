@@ -115,6 +115,19 @@ const commandList = {
                     default:
                         return "No entity preset \"" + args[1] + "\"";
                 }
+            case "delete":
+                if (!args[1]) {
+                    return "Usage: ent delete [entityname]";
+                }
+                if (args[1] == "player") {
+                    // idiot proof
+                    return "Cannot delete player entity.";
+                }
+                if (!renderer.entities[args[1]]) {
+                    return "Entity does not exist.";
+                }
+                renderer.entities[args[1]].delete();
+                return "Entity deleted.";
             case "tp":
             case "setpos":
                 if (!args[3]) {
