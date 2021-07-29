@@ -193,6 +193,13 @@ class Renderer {
                             } else {
                                 entity.isOutOfBounds = false;
                             }
+                            if (!entity.visible) {
+                                if (params.debug) {
+                                    // If debug mode is on, make invisible entities show as red
+                                    y = y.substr(0, entity.x) + "\x1b[91m" + entity.sprite + "\x1b[0m" + y.substr(entity.x + entity.sprite.length);
+                                }
+                                return;
+                            }
                             if (this.getDataAt(entity.x, entity.y) == 1) {
                                 y = y.substr(0, entity.x) + "\x1b[47;30m" + entity.sprite + "\x1b[0m" + y.substr(entity.x + entity.sprite.length);
                             } else {

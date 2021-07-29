@@ -62,6 +62,11 @@ class Entity {
             return;
         } else if ((this.enableCollision && this.currentRenderer) && Object.values(this.currentRenderer.entities).find(e => e.x == xb && e.y == yb && e.enableCollision)) {
             // Entity collided with entity
+            // Run collision callback first, I'm not a monster
+            var e = Object.values(this.currentRenderer.entities).find(e => e.x == xb && e.y == yb && e.enableCollision);
+            if (e.collideFunctions[this.name]) {
+                e.collideFunctions[this.name]();
+            }
             return;
         } else {
             this.x = xb;
