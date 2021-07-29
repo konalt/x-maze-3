@@ -1,5 +1,6 @@
 const { Direction } = require("./direction");
 const { Entity } = require("./entity");
+const { pickupKey, registerKeydoor } = require("./keys");
 const levelparser = require("./levelparser");
 const { Renderer } = require("./renderer");
 
@@ -89,6 +90,10 @@ const commandList = {
                         var newEnt = new Entity(en);
                         newEnt.setSprite("○");
                         newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
+                        // Add player collision function
+                        newEnt.setOnCollideWith(renderer.entities.player, () => {
+                            pickupKey();
+                        });
                         renderer.addEntity(newEnt);
                         return "Key added. Name: " + en;
                     case "keydoor":
@@ -100,6 +105,8 @@ const commandList = {
                         newEnt.setSprite("░");
                         // Plop it down on the player
                         newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
+                        // Register the keydoor
+                        registerKeydoor(newEnt);
                         renderer.addEntity(newEnt);
                         return "Keydoor added. Name: " + en;
 
