@@ -60,6 +60,9 @@ class Entity {
         } else if ((this.enableCollision && this.currentRenderer) && Object.values(BlockTypes)[this.currentRenderer.getDataAt(xb, yb)].col) {
             // Entity collided with block
             return;
+        } else if ((this.enableCollision && this.currentRenderer) && Object.values(this.currentRenderer.entities).find(e => e.x == xb && e.y == yb && e.enableCollision)) {
+            // Entity collided with entity
+            return;
         } else {
             this.x = xb;
             this.y = yb;
@@ -91,8 +94,8 @@ class Entity {
         }
         // is there a better way of doing this?
         // who knows
-        // delet this
-        delete this;
+        // undefine it maybe????
+        this.currentRenderer.entities[this.name] = undefined;
     }
 }
 

@@ -86,7 +86,7 @@ const commandList = {
                         // In THEORY, this should stop duplicate entities
                         // unless you're astronomically unlucky
                         // haven't done the math yet
-                        var en = "key.preset." + genRanHex(16);
+                        var en = "key" + genRanHex(16);
                         var newEnt = new Entity(en);
                         newEnt.setSprite("○");
                         // Set position. If position is not given, just spawn it at 0,0
@@ -99,14 +99,14 @@ const commandList = {
                         });
                         return "Key added. Name: " + en;
                     case "keydoor":
-                        var en = "keydoor.preset." + genRanHex(16);
+                        var en = "keydoor" + genRanHex(16);
                         var newEnt = new Entity(en);
                         // VSCode, why do this character be big tho
                         // https://github.com/Microsoft/vscode/issues/22262
                         // This issue is four years old
                         newEnt.setSprite("░");
                         // Plop it down on the player
-                        newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
+                        newEnt.setPosition(args[2] ? args[2] : 0, args[3] ? args[3] : 0);
                         // Register the keydoor
                         registerKeydoor(newEnt);
                         renderer.addEntity(newEnt);

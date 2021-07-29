@@ -184,6 +184,8 @@ class Renderer {
                         }
                     }
                     Object.values(this.entities).forEach(entity => {
+                        // Why is this needed? The game crashes without it when using ent delete
+                        if (entity == undefined || typeof entity == "undefined") return;
                         if (entity.y == index) {
                             if (entity.x < 0 || entity.y < 0 || entity.x >= y.length || entity.y >= this.height) {
                                 entity.isOutOfBounds = true;
