@@ -3,6 +3,10 @@ const { Entity } = require("./entity");
 const levelparser = require("./levelparser");
 const { Renderer } = require("./renderer");
 
+// STOLE THIS FROM https://stackoverflow.com/questions/58325771/how-to-generate-random-hex-string-in-javascript
+// LOLOLOLOLOL
+const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+
 class Command {
     constructor(cb = function() { return "This command is not supported yet."; }) {
         this.cb = cb;
@@ -71,6 +75,36 @@ const commandList = {
                 var newEnt = new Entity(args[1]);
                 renderer.addEntity(newEnt);
                 return "Entity " + args[1] + " added.";
+            case "addpreset":
+                if (!args[1]) {
+                    return "Usage: ent addpreset [preset entity]"
+                }
+                var randSize = 6;
+                switch (args[1]) {
+                    case "key":
+                        // In THEORY, this should stop duplicate entities
+                        // unless you're astronomically unlucky
+                        // haven't done the math yet
+                        var en = "key.preset." + genRanHex(16);
+                        var newEnt = new Entity(en);
+                        newEnt.setSprite("○");
+                        renderer.addEntity(newEnt);
+                        return "Key added. Name: " + en;
+                    case "keydoor":
+                        var en = "keydoor.preset." + genRanHex(16);
+                        var newEnt = new Entity(en);
+                        // VSCode, why do this character be big tho
+                        // https://github.com/Microsoft/vscode/issues/22262
+                        // This issue is four years old
+                        newEnt.setSprite("░");
+                        // Plop it down on the player
+                        newEnt.setPosition(renderer.entities.player.x, renderer.entities.player.y);
+                        renderer.addEntity(newEnt);
+                        return "Keydoor added. Name: " + en;
+
+                    default:
+                        return "No entity preset \"" + args[1] + "\"";
+                }
             case "tp":
             case "setpos":
                 if (!args[3]) {
