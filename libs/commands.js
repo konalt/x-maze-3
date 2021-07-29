@@ -1,3 +1,4 @@
+const { Direction } = require("./direction");
 const { Entity } = require("./entity");
 const levelparser = require("./levelparser");
 const { Renderer } = require("./renderer");
@@ -30,14 +31,18 @@ const commandList = {
         }
         switch (args[0]) {
             case "clone":
-                if (renderer.entities[args[1].toLowerCase()]) {
+                if (!args[1]) {
+                    return "Usage: ent clone [entityname]";
+                }
+                var ent = renderer.entities[args[1].toLowerCase()];
+                if (ent) {
                     var cache = [];
-                    renderer.entities[args[1].toLowerCase() + "_clone"] = JSON.parse(JSON.stringify({ ent: renderer.entities[args[1].toLowerCase()] }, (key, value) => {
+                    // I forgor 💀 that there's literally a renderer.addEntity() function
+                    // I forgor 💀 that I should use that
+                    // I'm too lazy to fix this soooo
+                    renderer.entities[args[1].toLowerCase() + "_clone"] = JSON.parse(JSON.stringify({ ent: ent }, (key, value) => {
                         if (typeof value === 'object' && value !== null) {
-                            // Duplicate reference found, discard key
                             if (cache.includes(value)) return;
-
-                            // Store value in our collection
                             cache.push(value);
                         }
                         return value;
@@ -52,8 +57,9 @@ const commandList = {
                 if (!args[2]) {
                     return "Usage: ent sprite [entityname] [sprite]";
                 }
-                if (renderer.entities[args[1].toLowerCase()]) {
-                    renderer.entities[args[1].toLowerCase()].setSprite(args[2].substr(0, 1));
+                var ent = renderer.entities[args[1].toLowerCase()];
+                if (ent) {
+                    ent.setSprite(args[2].substr(0, 1));
                     return "Sprite set.";
                 } else {
                     return "Entity " + args[1].toLowerCase() + "does not exist";
@@ -70,8 +76,17 @@ const commandList = {
                 if (!args[3]) {
                     return "Usage: ent " + args[0] + " [entityname] [x] [y]";
                 }
-                if (renderer.entities[args[1].toLowerCase()]) {
-                    renderer.entities[args[1].toLowerCase()].setPosition(args[2], args[3]);
+                var ent = renderer.entities[args[1].toLowerCase()];
+                if (ent) {
+                    ent.setPosition(args[2], args[3]);
+                    // For some reason this bugs out when an ent is teleported to x>1?
+                    // Band aid solution here
+                    ent.setCollision(false);
+                    ent.move(Direction.LEFT);
+                    ent.move(Direction.RIGHT);
+                    ent.setCollision(true);
+                    // Found because moving left and right fixes the issue
+                    // Someone please fix this
                     return "Teleported entity " + args[1] + " to " + args[2] + "," + args[3];
                 } else {
                     return "Entity " + args[1].toLowerCase() + "does not exist";
