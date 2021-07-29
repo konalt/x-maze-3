@@ -97,6 +97,11 @@ const commandList = {
                         newEnt.setOnCollideWith(renderer.entities.player, () => {
                             pickupKey(newEnt);
                         });
+                        var oc = JSON.parse(JSON.stringify({ oc: newEnt.enableCollision }));
+                        newEnt.setCollision(false);
+                        newEnt.move(Direction.LEFT);
+                        newEnt.move(Direction.RIGHT);
+                        newEnt.setCollision(oc);
                         return "Key added. Name: " + en;
                     case "keydoor":
                         var en = "keydoor" + genRanHex(16);
@@ -110,6 +115,11 @@ const commandList = {
                         // Register the keydoor
                         registerKeydoor(newEnt);
                         renderer.addEntity(newEnt);
+                        var oc = JSON.parse(JSON.stringify({ oc: newEnt.enableCollision }));
+                        newEnt.setCollision(false);
+                        newEnt.move(Direction.LEFT);
+                        newEnt.move(Direction.RIGHT);
+                        newEnt.setCollision(oc);
                         return "Keydoor added. Name: " + en;
 
                     default:
@@ -138,10 +148,11 @@ const commandList = {
                     ent.setPosition(args[2], args[3]);
                     // For some reason this bugs out when an ent is teleported to x>1?
                     // Band aid solution here
+                    var oc = JSON.parse(JSON.stringify({ oc: ent.enableCollision }));
                     ent.setCollision(false);
                     ent.move(Direction.LEFT);
                     ent.move(Direction.RIGHT);
-                    ent.setCollision(true);
+                    ent.setCollision(oc);
                     // Found because moving left and right fixes the issue
                     // Someone please fix this
                     return "Teleported entity " + args[1] + " to " + args[2] + "," + args[3];
