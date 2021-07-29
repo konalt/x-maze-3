@@ -91,7 +91,8 @@ class Entity {
         }
         // is there a better way of doing this?
         // who knows
-        this = undefined;
+        // delet this
+        delete this;
     }
 }
 
