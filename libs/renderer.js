@@ -183,6 +183,8 @@ class Renderer {
                             y.padEnd(y.length < this.width);
                         }
                     }
+                    // Stuff for prioritizing player rendering
+                    var playerDrawn = false;
                     Object.values(this.entities).forEach(entity => {
                         // Why is this needed? The game crashes without it when using ent delete
                         if (entity == undefined || typeof entity == "undefined") return;
@@ -193,6 +195,8 @@ class Renderer {
                             } else {
                                 entity.isOutOfBounds = false;
                             }
+                            if (playerDrawn && entity.x == this.entities.player.x) return;
+                            if (entity.name == "player") playerDrawn = true;
                             if (!entity.visible) {
                                 if (params.debug) {
                                     // If debug mode is on, make invisible entities show as red
