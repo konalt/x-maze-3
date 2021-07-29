@@ -9,7 +9,6 @@ const { Entity } = require("./libs/entity");
 const { Direction } = require("./libs/direction");
 const { run } = require("./libs/commands");
 const menus = require("./libs/menus");
-const { inspect } = require("util");
 
 // Create renderer
 var renderer = new Renderer();
